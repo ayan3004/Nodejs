@@ -28,8 +28,8 @@ app.get("/", (req, res) => {
 app.post("/insertData", (req, res) => {
   const { id, name } = req.body;
   let obj = {
-    id: id,
-    name: name,
+     id,
+     name,
   };
   task.push(obj);
   res.redirect("/");
@@ -53,29 +53,14 @@ app.get("/editdata", (req, resp) => {
 app.post("/updatedata", (req, resp) => {
   const { id, name } = req.body;
   const todo_id = parseInt(id);
-  const todo = task.find((el) => el.id === todo_id);
+  const todo = task.find((el) => el.id == todo_id);
 
-  if (todo) {
-    todo.name = name;
-  }
-  resp.redirect("/");
+   todo.id=todo_id;
+   todo.name=name
+
+   resp.redirect("/")
 });
 
-app.get("/home", middleware, (req, res) => {
-  res.render("Home");
-});
-
-app.get("/admin",middleware, (req, res) => {
-  res.render("index1");
-});
-
-app.get("/register", middleware,(req, res) => {
-  res.render("register");
-});
-
-app.get("/login", middleware,(req, res) => {
-  res.render("login");
-});
 
 
 app.use(middleware);
