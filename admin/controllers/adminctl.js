@@ -12,9 +12,11 @@ module.exports.index = (req, res) => {
 module.exports.userlogin=async(req,res)=>{
     console.log(req.body)
     let user = await admin.findOne({email : req.body.email})
+    console.log(user);
+    
     if(user){
         if(user.password == req.body.password){
-            res.cookie("admin",user)
+            res.cookie("adminData",user)
             res.redirect("/dashboard")
         }
         else{
@@ -29,7 +31,7 @@ module.exports.userlogin=async(req,res)=>{
 }
 
 module.exports.logout=async(req,res)=>{
-    res.clearCookie("admin");
+    res.clearCookie("adminData");
     res.redirect("/")
 }
 module.exports.table = (req, res) => {
@@ -41,17 +43,21 @@ module.exports.table = (req, res) => {
 };
 
 module.exports.dashboard = async (req, res) => {
+    // console.log(req.cookies.adminData);
+    
     try {
-
-        if(req.cookies.admin == undefined){
+        if(req.cookies.adminData == undefined){
             return res.redirect("/")
         }
         else{
-            let admindata =  await admin.findById(req.cookies.admin._id)
+            let admindata =  await admin.findById(req.cookies.adminData._id)
+            console.log(admindata);
             if(admindata){
                 res.render("dashboard")
+            }else{
+                res.redirect("/")
             }
-            res.redirect("/")
+            
         }
     } catch (error) {
         console.log("Error rendering dashboard: ", error);
@@ -69,7 +75,9 @@ module.exports.addform = async (req, res) => {
             if(admindata){
                 res.render("addform");
             }
-            res.redirect("/")
+            else{
+                res.redirect("/")
+            }
         }
     } catch (error) {
         console.log("Error rendering addform: ", error);
@@ -91,7 +99,9 @@ module.exports.viewform = async (req, res) => {
                 } else {
                     console.log("Data not found");
                 }            }
-            res.redirect("/")
+                else{
+                    res.redirect("/")
+                }
         }
     } catch (error) {
         console.log("Error rendering addform: ", error);
@@ -113,7 +123,9 @@ module.exports.insert = async (req, res) => {
                 } else {
                     console.log("Data not submitted");
                 }            }
-            res.redirect("/")
+                else{
+                    res.redirect("/")
+                }
         }
     } catch (error) {
         console.log("Error rendering addform: ", error);
@@ -163,7 +175,9 @@ module.exports.updatedata = async (req, res) => {
                 } else {
                     console.log("Data not updated");
                 }         }
-            res.redirect("/")
+                else{
+                    res.redirect("/")
+                }
         }
     } catch (error) {
         console.log("Error rendering addform: ", error);
