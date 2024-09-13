@@ -51,7 +51,6 @@ module.exports.dashboard = async (req, res) => {
         }
         else{
             let admindata =  await admin.findById(req.cookies.adminData._id)
-            console.log(admindata);
             if(admindata){
                 res.render("dashboard")
             }else{
@@ -65,68 +64,59 @@ module.exports.dashboard = async (req, res) => {
 };
 
 module.exports.addform = async (req, res) => {
-    try {
 
-        if(req.cookies.admin == undefined){
+    
+    try {
+        if(req.cookies.adminData == undefined){
             return res.redirect("/")
         }
         else{
-            let admindata =  await admin.findById(req.cookies.admin._id)
+            let admindata =  await admin.findById(req.cookies.adminData._id)
             if(admindata){
-                res.render("addform");
-            }
-            else{
+                res.render("addform")
+            }else{
                 res.redirect("/")
             }
+            
         }
     } catch (error) {
-        console.log("Error rendering addform: ", error);
-    }
+        console.log("Error rendering dashboard: ", error);
+    }
 };
-
 module.exports.viewform = async (req, res) => {
+    
     try {
-
-        if(req.cookies.admin == undefined){
+        if(req.cookies.adminData == undefined){
             return res.redirect("/")
         }
         else{
-            let admindata =  await admin.findById(req.cookies.admin._id)
+            let admindata =  await admin.findById(req.cookies.adminData._id)
             if(admindata){
                 let data = await admin.find({});
-                if (data) {
-                    res.render("viewform", { data });
-                } else {
-                    console.log("Data not found");
-                }            }
-                else{
-                    res.redirect("/")
-                }
+    if (data) {
+        res.render("viewform", { data });
+    } else {
+        console.log("Data not found");
+    } 
+            }else{
+                res.redirect("/")
+            }
+            
         }
     } catch (error) {
-        console.log("Error rendering addform: ", error);
-    }
+        console.log("Error rendering dashboard: ", error);
+    }
 };
 
 module.exports.insert = async (req, res) => {
     try {
 
-        if(req.cookies.admin == undefined){
-            return res.redirect("/")
-        }
-        else{
-            let admindata =  await admin.findById(req.cookies.admin._id)
-            if(admindata){
-                let data = await admin.create(req.body);
-                if (data) {
-                    res.redirect("viewform");
-                } else {
-                    console.log("Data not submitted");
-                }            }
-                else{
-                    res.redirect("/")
-                }
-        }
+        let data = await admin.create(req.body);
+        if (data) {
+            res.redirect("viewform");
+        } else {
+            console.log("Data not submitted");
+        }   
     } catch (error) {
         console.log("Error rendering addform: ", error);
     }
@@ -149,12 +139,29 @@ module.exports.deletedata = async (req, res, next) => {
 
 module.exports.editdata = async (req, res) => {
     try {
-        let editdata = await admin.findById(req.query.id);
+        try {
+            if(req.cookies.adminData == undefined){
+                return res.redirect("/")
+            }
+            else{
+                let admindata =  await admin.findById(req.cookies.adminData._id)
+                if(admindata){
+                    let editdata = await admin.findById(req.query.id);
         if (editdata) {
             res.render("edit", { editdata });
         } else {
             console.log("Data not found");
         }
+        
+                }else{
+                    res.redirect("/")
+                }
+                
+            }
+        } catch (error) {
+            console.log("Error rendering dashboard: ", error);
+            }
+
     } catch (error) {
         console.log("Error retrieving data: ", error);
     }
@@ -163,22 +170,12 @@ module.exports.editdata = async (req, res) => {
 module.exports.updatedata = async (req, res) => {
     try {
 
-        if(req.cookies.admin == undefined){
-            return res.redirect("/")
-        }
-        else{
-            let admindata =  await admin.findById(req.cookies.admin._id)
-            if(admindata){
-                let updateData = await admin.findByIdAndUpdate(req.query.id, req.body);
+        let updateData = await admin.findByIdAndUpdate(req.query.id, req.body);
                 if (updateData) {
                     res.redirect("viewform");
                 } else {
                     console.log("Data not updated");
-                }         }
-                else{
-                    res.redirect("/")
-                }
-        }
+                }   
     } catch (error) {
         console.log("Error rendering addform: ", error);
     }
