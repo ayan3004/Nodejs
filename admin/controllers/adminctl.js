@@ -1,4 +1,7 @@
 const admin = require("../model/admin");
+const fs = require("fs");
+const path = require("path");
+
 
 module.exports.index = (req, res) => {
     try {
@@ -34,16 +37,9 @@ module.exports.logout=async(req,res)=>{
     res.clearCookie("adminData");
     res.redirect("/")
 }
-module.exports.table = (req, res) => {
-    try {
-        res.render("table");
-    } catch (error) {
-        console.log("Error rendering table page: ", error);
-    }
-};
+
 
 module.exports.dashboard = async (req, res) => {
-    // console.log(req.cookies.adminData);
     
     try {
         if(req.cookies.adminData == undefined){
@@ -110,6 +106,9 @@ module.exports.viewform = async (req, res) => {
 
 module.exports.insert = async (req, res) => {
     try {
+        console.log(req.filename);
+
+        req.body.image = req.filename.path  
 
         let data = await admin.create(req.body);
         if (data) {
@@ -125,6 +124,10 @@ module.exports.insert = async (req, res) => {
 module.exports.deletedata = async (req, res, next) => {
     try {
         const id = req.query.id;
+        let singledata = await admin.findById(id);
+        if (singledata) {
+            fs.unlinkSync(singledata.image);
+        }
         let deletedData = await admin.findByIdAndDelete(id);
         if (deletedData) {
             res.redirect("back");
@@ -169,13 +172,23 @@ module.exports.editdata = async (req, res) => {
 
 module.exports.updatedata = async (req, res) => {
     try {
+       
 
-        let updateData = await admin.findByIdAndUpdate(req.query.id, req.body);
-                if (updateData) {
-                    res.redirect("viewform");
-                } else {
-                    console.log("Data not updated");
-                }   
+        let img = "";
+        let singledata = await admin.findById(req.query.id);
+        if (singledata) {
+            img = req.file ? req.file.path : singledata.image;
+            if (req.file) {
+                fs.unlinkSync(singledata.image);
+            }
+            req.body.image = img;
+            let updateData = await admin.findByIdAndUpdate(req.query.id, req.body);
+        if (updateData) {
+            res.redirect("viewform");
+        } else {
+            console.log("Data not updated");
+        }  
+        } 
     } catch (error) {
         console.log("Error rendering addform: ", error);
     }
