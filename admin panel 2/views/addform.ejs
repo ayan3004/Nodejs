@@ -30,7 +30,7 @@
             <h5 class="card-title fw-semibold mb-4">Forms</h5>
             <div class="card">
               <div class="card-body">
-                <form method="post" action="/insert">
+                <form method="post" action="/insert" enctype="multipart/form-data">
                   <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">First Name</label>
                     <input type="text" class="form-control" id="exampleInputPassword1" name="fname">
@@ -53,6 +53,10 @@
                   <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Mobile Number</label>
                     <input type="number" class="form-control" id="exampleInputPassword1" name="number">
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputPassword1" name="image" class="form-label">Image</label>
+                    <input type="file" class="form-control" id="exampleInputPassword1" name="image">
                   </div>
 
 

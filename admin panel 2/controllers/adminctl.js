@@ -1,4 +1,6 @@
 const admin = require("../model/admin");
+const fs = require('fs')
+const path = require('path')
 
 module.exports.index = (req, res) => {
     try {
@@ -73,7 +75,9 @@ module.exports.viewform = async (req, res) => {
 
 module.exports.insert = async (req, res) => {
     try {
-
+        if(req.file){
+            req.body.image = req.file.filename
+        }
         let data = await admin.create(req.body);
         if (data) {
             res.redirect("viewform");
@@ -87,6 +91,14 @@ module.exports.insert = async (req, res) => {
 
 module.exports.deletedata = async (req, res, next) => {
     try {
+        const deleteImage = await admin.findById(req.query.id)
+        if(deleteImage.image){
+            const oldImage = path.join(__dirname, '../image/', deleteImage.image)
+            if(fs.existsSync(oldImage)){
+                fs.unlinkSync(oldImage)
+            }
+        }
+
         const id = req.query.id;
         let deletedData = await admin.findByIdAndDelete(id);
         if (deletedData) {
@@ -117,7 +129,17 @@ module.exports.editdata = async (req, res) => {
 
 module.exports.updatedata = async (req, res) => {
     try {
-
+        const editimage = await admin.findById(req.query.id)
+        if(editimage.image){
+            const oldImage = path.join(__dirname, '../image/', editimage.image)
+            if(fs.existsSync(oldImage)){
+                fs.unlinkSync(oldImage)
+            }
+                req.body.image = req.file.filename
+            
+        }else{
+            req.body.image = editimage.image
+        }
         let updateData = await admin.findByIdAndUpdate(req.query.id, req.body);
                 if (updateData) {
                     res.redirect("viewform");

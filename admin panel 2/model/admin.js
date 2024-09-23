@@ -23,6 +23,10 @@ const crud = mongoose.Schema(
         number : {
             type : String,
             required : true
+        },
+        image: {
+            type: String,
+            required: true
         }
     }
 );

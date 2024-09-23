@@ -27,6 +27,7 @@ app.use(passport.setauthuser)
 const routes = require("./routes")
 app.use("/",routes)
 app.use(express.static(path.join(__dirname , "Public")))
+app.use('/image', express.static(path.join(__dirname, 'image')))
 app.listen(port,(err)=>{
     err ? console.log(err) : console.log(`server started on ${port}`);   
 });
