@@ -1,3 +1,6 @@
+const admin = require("../model/admin")
+const manager = require("../model/manager")
+const employe = require("../model/employe")
 const jwt = require("jsonwebtoken")
 
 const auth = (req,res,next)=>{
@@ -8,6 +11,7 @@ const auth = (req,res,next)=>{
     }
     let newtoken = token.slice(7,token.length);
     let decode = jwt.verify(newtoken,"node");
+    
     req.user = decode;
     
     next();

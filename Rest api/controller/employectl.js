@@ -21,7 +21,7 @@ module.exports.logemploye =async(req,res)=>{
 }
 
 module.exports.viewemploye = async(req,res)=>{
-    let data = await employe.find({});
+    let data = await employe.findOne({email: req.body.email});
     data ? res.status(200).json({ msg: 'data sent scuccessfully', employedata: data }) : res.status(404).json({ msg: 'error for sendin data' })   
 }
 module.exports.deletemploye = async(req,res)=>{
@@ -79,7 +79,7 @@ module.exports.verifyOtp = async (req, res) => {
             const hashedPassword = await bcrypt.hash(newpassword, 10);
             await employe.findByIdAndUpdate(adminId, { password: hashedPassword }) && res.status(200).json({ msg: "Password updated successfully" });
         }else{
-            return res.status(400).json({ msg: "new paasword and confirmpassword is same" });
+            return res.status(400).json({ msg: "new paasword and confirmpassword is not same" });
 
         }
     } else {

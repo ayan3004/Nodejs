@@ -22,12 +22,10 @@ routes.post("/forgetpass", adminctl.forgetpass);
 routes.post("/verifyOtp",adminctl.verifyOtp);
 routes.post("/addmanager",adminctl.addmanager);
 routes.get("/viewadmin",adminctl.viewadmin)
-routes.post("/logmanager",adminctl.logmanager);
 routes.get("/viewmanager",adminctl.viewmanager)
 routes.delete("/deletemanager",adminctl.deletemanager)
 routes.post("/addemploye",adminctl.addemploye)
 routes.get("/viewemploye",adminctl.viewemploye)
-routes.post("/logemploye",adminctl.logemploye)
 routes.delete("/deletemploye",adminctl.deletemploye)
 
 

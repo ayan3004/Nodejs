@@ -14,10 +14,11 @@ const auth = async(req,res,next)=>{
 
     let man = await manager.findById(decode.userdata._id)
     let emp = await employe.findById(decode.userdata._id)
+
     if(!man && !emp){
         return res.status(400).json({msg:"invalid manager or employe"})
     }
-
+ 
     req.user = decode;
     
     next();

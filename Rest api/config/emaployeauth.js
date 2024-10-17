@@ -1,5 +1,3 @@
-const admin = require("../model/admin")
-const manager = require("../model/manager")
 const employe = require("../model/employe")
 const jwt = require("jsonwebtoken")
 
@@ -12,13 +10,13 @@ const auth = async(req,res,next)=>{
     let newtoken = token.slice(7,token.length);
     let decode = jwt.verify(newtoken,"node");
 
-    let man = await employe.findById(decode.employedata._id)
+    let man = await employe.findById(decode.userdata._id)
     if(!man){
         return res.status(400).json({msg:"invalid employe"})
     }
 
     req.user = decode;
-    
+      
     next();
 }
 

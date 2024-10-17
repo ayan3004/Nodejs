@@ -11,7 +11,6 @@ routes.post("/forgetpass", managerctl.forgetpass);
 routes.post("/verifyOtp",managerctl.verifyOtp);
 routes.post("/addemploye",managerctl.addemploye)
 routes.get("/viewemploye",managerctl.viewemploye)
-routes.post("/logemploye",managerctl.logemploye)
 routes.delete("/deletemploye",managerctl.deletemploye)
 
 
